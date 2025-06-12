@@ -92,12 +92,11 @@ export const globalInit = async () => {
     }, {});
   })();
   const getAccountApis = await safeLoadApis('components-admin:Apis@getApis');
-  const interviewAssistantEnums = await safeLoadApis('leapin-ai-agent:InterviewAssistant@enums');
 
   return {
     ajax,
     staticUrl: baseApiUrl,
-    enums: Object.assign({}, interviewAssistantEnums),
+    enums: Object.assign({}),
     apis: Object.assign({}, getAccountApis(), remoteApis, {
       file: {
         contentWindowUrl: 'https://uc.fatalent.cn/components/@kne/iframe-resizer/0.1.3/dist/contentWindow.js',
@@ -113,7 +112,7 @@ export const globalInit = async () => {
       }
     }, getApis()),
     themeToken: {
-      //colorPrimary: '#4183F0'
+      colorPrimary: '#4183F0'
     }
   };
 };
