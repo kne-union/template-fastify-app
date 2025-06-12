@@ -8,8 +8,11 @@
     "start": "run-p start-frontend start-server",
     "start-server": "cd server && npm run dev",
     "start-frontend": "cross-env PORT=3040 MODULES_DEV_PUBLIC_URL=/ craco start",
-    "build": "cross-env COMPONENTS_NAME=<%=name%> MODULES_DEV_PUBLIC_URL=/<%=name%> craco build",
+    "build": "cross-env COMPONENTS_NAME=<%=name%> MODULES_DEV_PUBLIC_URL=/ craco build && npm run deploy && npm run deploy-prod",
+    "deploy": "cross-env OUTPUT_HTML_PATH=build/entry.html DEPLOY_URL=/ API_URL=/ RUNTIME_ENV='env:staging' npx @kne/npm-tools entryHtml",
+    "deploy-prod": "cross-env OUTPUT_HTML_PATH=build/entry-prod.html DEPLOY_URL=/ API_URL=/ RUNTIME_ENV='env:prod' npx @kne/npm-tools entryHtml",
     "create": "modules-dev-create",
+    "create-biz": "modules-dev-create --template @kne-template/components-biz",
     "test": "craco test --coverage",
     "eject": "react-scripts eject",
     "prettier": "prettier --config .prettierrc --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss}'",
@@ -85,5 +88,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.2",
     "sass": "^1.75.0"
+  },
+  "dependencies": {
+    "@kne/axios-fetch": "^1.0.7",
+    "@kne/token-storage": "^1.0.0",
+    "@kne/use-ref-callback": "^0.1.2"
   }
 }
