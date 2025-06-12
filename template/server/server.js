@@ -65,6 +65,34 @@ const createServer = () => {
     await fastify.sequelize.sync();
   }));
 
+  fastify.register(
+    require('fastify-plugin')(async fastify => {
+      const getEntry = () => {
+        const env = fastify.config.ENV;
+        if (env === 'staging') {
+          return 'entry.html';
+        }
+
+        if (env === 'prod') {
+          return 'entry-prod.html';
+        }
+
+        return 'index.html';
+      };
+      fastify.register(require('@fastify/static'), {
+        root: path.join(__dirname, './build'), // 静态文件目录
+        prefix: '/',
+        decorateReply: false,
+        index: getEntry()
+      });
+      fastify.setNotFoundHandler((req, reply) => {
+        if (req.method === 'GET') {
+          reply.sendFile(getEntry(), { root: path.join(__dirname, './build') });
+        }
+      });
+    })
+  );
+
   fastify.register(require('@kne/fastify-response-data-format'));
 };
 
