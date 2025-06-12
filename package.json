@@ -1,6 +1,6 @@
 {
   "name": "@kne-template/fastify-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "用于一个使用fastify构建的app",
   "files": [
     "prompts.json",
