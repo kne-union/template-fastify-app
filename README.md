@@ -87,24 +87,19 @@ npm run dev
 
 ## 环境配置
 
-项目使用 .env 文件进行环境配置，支持以下环境变量：
+环境变量统一在 `server/env.schema.json` 中声明（标准 JSON Schema：必填项放顶层 `required`，每个变量写 `description`，敏感值标 `writeOnly: true`），`server.js` 通过 `@fastify/env` 加载并校验，本地开发在 `server/.env` 中提供取值：
 
 ```env
-# 服务器配置
-PORT=3001                 # 后端服务器端口
-NODE_ENV=development     # 环境模式
-
-# 数据库配置
-DB_TYPE=sqlite           # 数据库类型：sqlite, mysql, postgresql
-DB_HOST=localhost       # 数据库主机
-DB_PORT=3306           # 数据库端口
-DB_NAME=fastify_app    # 数据库名称
-DB_USER=root          # 数据库用户名
-DB_PASSWORD=password  # 数据库密码
-
-# JWT配置
-JWT_SECRET=your-secret-key  # JWT密钥
+DB_DIALECT=sqlite        # 数据库类型：sqlite, mysql, postgres
+DB_HOST=data.db          # 数据库地址，sqlite 时为数据文件路径
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
+ENV=local                # staging 使用 entry.html，prod 使用 entry-prod.html
+PORT=8040                # 服务监听端口
 ```
+
+新增环境变量时先在 `env.schema.json` 中声明。通过 App Manager 部署时，部署前会按该文件校验变量，缺少该文件的包会被拒绝；打包可使用 `npx @kne/npm-tools packApp`。
 
 ## 开发指南
 
