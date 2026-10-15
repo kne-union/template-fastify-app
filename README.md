@@ -94,17 +94,19 @@ npm run dev
 PORT=3001                 # 后端服务器端口
 NODE_ENV=development     # 环境模式
 
-# 数据库配置
-DB_TYPE=sqlite           # 数据库类型：sqlite, mysql, postgresql
-DB_HOST=localhost       # 数据库主机
-DB_PORT=3306           # 数据库端口
-DB_NAME=fastify_app    # 数据库名称
-DB_USER=root          # 数据库用户名
-DB_PASSWORD=password  # 数据库密码
+# 数据库配置（不配置时本地开发默认 sqlite，数据文件为 data.db）
+DB_DIALECT=postgres      # 数据库类型：生产用 postgres，本地开发可用 sqlite
+DB_HOST=localhost        # 数据库主机；sqlite 时为数据文件路径
+DB_PORT=5432             # 数据库端口
+DB_DATABASE=fastify_app  # 数据库名称
+DB_USERNAME=postgres     # 数据库用户名
+DB_PASSWORD=password     # 数据库密码
 
 # JWT配置
 JWT_SECRET=your-secret-key  # JWT密钥
 ```
+
+生产环境用 postgres（`pg` 在 dependencies）。`sqlite3` 只在 devDependencies，`npm install --production` 不会安装，生产环境须配置 `DB_DIALECT=postgres` 及连接参数。
 
 ## 开发指南
 
