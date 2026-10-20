@@ -6,7 +6,12 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const renderRoot = async App => {
-    const globalPreset = await globalInit();
+    let globalPreset;
+    try {
+        globalPreset = await globalInit();
+    } finally {
+        document.getElementById('app-boot')?.remove();
+    }
     root.render(
         <BrowserRouter>
             <App themeToken={globalPreset.themeToken} globalPreset={globalPreset} />
