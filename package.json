@@ -8,13 +8,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kne-union/tempalte-fastify-server.git"
+    "url": "git+https://github.com/kne-union/template-fastify-app.git"
   },
   "keywords": [],
   "author": "linzp",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kne-union/tempalte-fastify-server/issues"
+    "url": "https://github.com/kne-union/template-fastify-app/issues"
   },
-  "homepage": "https://github.com/kne-union/tempalte-fastify-server#readme"
+  "homepage": "https://github.com/kne-union/template-fastify-app#readme"
 }
