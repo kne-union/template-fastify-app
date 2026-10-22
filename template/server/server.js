@@ -21,19 +21,7 @@ const options = {
 const createServer = () => {
   fastify.register(fastifyEnv, {
     dotenv: true,
-    schema: {
-      type: 'object',
-      properties: {
-        DB_DIALECT: { type: 'string', default: 'sqlite' },
-        DB_HOST: { type: 'string', default: 'data.db' },
-        DB_PORT: { type: 'number' },
-        DB_USERNAME: { type: 'string' },
-        DB_PASSWORD: { type: 'string' },
-        DB_DATABASE: { type: 'string' },
-        ENV: { type: 'string', default: 'local' },
-        PORT: { type: 'number', default: <%=port%> }
-      }
-    }
+    schema: require('./env.schema.json')
   });
 
   fastify.register(
@@ -49,19 +37,28 @@ const createServer = () => {
         },
         modelsGlobOptions: {
           syncOptions: {}
-        }
+        },
+        getUserModel: options.getUserModel
       });
+
+      fastify.register(require('@kne/fastify-account'), {
+        isTest: true,
+        prefix: `${options.prefix}`<% if (includeOidc) { %>,
+        getUserAuthenticate: () => fastify.oidc.authenticate.user<% } %>
+      });<% if (includeOidc) { %>
+
+      // .env 里的值不一定写入 process.env（@fastify/env 7 起不再写入），fastify-oidc 的环境变量默认值可能读不到，需显式传入
+      fastify.register(require('@kne/fastify-oidc'), {
+        selfClient: { clientName: '<%= name.charAt(0).toUpperCase() + name.slice(1) %>' },
+        origin: fastify.config.ORIGIN,
+        keyEncryptionSecret: fastify.config.OIDC_KEY_SECRET
+      });<% } %>
     })
   );
 
   fastify.register(require('@kne/fastify-file-manager'), {
     prefix: `${options.prefix}/static`,
     root: path.resolve('./static')
-  });
-
-  fastify.register(require('@kne/fastify-account'), {
-    isTest: true,
-    prefix: `${options.prefix}`
   });
 
   fastify.register(

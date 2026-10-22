@@ -22,6 +22,7 @@
 - @kne/fastify-account - 用户账户管理
 - @kne/fastify-file-manager - 文件管理
 - @kne/fastify-namespace - API 命名空间管理
+- @kne/fastify-oidc - OIDC 统一认证（创建时选择开启）
 
 ### 前端
 - React - 用户界面库
@@ -37,6 +38,7 @@ template/
 ├── server/                # 后端服务器代码
 │   ├── index.js          # 服务器入口
 │   ├── server.js         # 服务器配置
+│   ├── env.schema.json   # 环境变量定义（应用中心据此生成配置表单）
 │   ├── libs/             # 工具库
 │   └── package.json      # 后端依赖
 ├── src/                  # 前端源代码
@@ -102,9 +104,23 @@ DB_DATABASE=fastify_app  # 数据库名称
 DB_USERNAME=postgres     # 数据库用户名
 DB_PASSWORD=password     # 数据库密码
 
-# JWT配置
-JWT_SECRET=your-secret-key  # JWT密钥
+# OIDC 配置（开启 OIDC 时）
+ORIGIN=http://localhost:3040  # 站点访问地址，正式部署改为对外地址
+OIDC_KEY_SECRET=your-secret   # 独立部署作为 IdP 时的私钥加密密钥
 ```
+
+完整的环境变量定义见 `server/env.schema.json`。
+
+## OIDC 统一认证
+
+创建项目时选择开启 OIDC（默认开启）：
+
+- 独立运行：服务端即 IdP（`/oidc`），前端经 `components-admin:Oidc@OidcAuthenticate` 走 OIDC 登录，管理后台提供「统一认证」页
+- 部署到应用中心：以 central 模式接入宿主统一登录，issuer / clientId / audience 由宿主注入，前端从 `/api/oidc/config` 读取，并隐藏「统一认证」管理页
+
+## 路径前缀
+
+部署在子路径（如应用中心 `/app/{name}`）时，前端统一使用 `components-admin:Oidc@appUrl` 处理路径：路由 `basename` 用 `appUrl.routerBasename()`，接口地址用 `appUrl.apiBase()`，页面跳转用 `appUrl.page(path)`，静态资源用 `appUrl.asset(path)`，不要自己拼 `PUBLIC_URL`。
 
 生产环境用 postgres（`pg` 在 dependencies）。`sqlite3` 只在 devDependencies，`npm install --production` 不会安装，生产环境须配置 `DB_DIALECT=postgres` 及连接参数。
 
