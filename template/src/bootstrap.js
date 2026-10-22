@@ -13,7 +13,7 @@ const renderRoot = async App => {
         document.getElementById('app-boot')?.remove();
     }
     root.render(
-        <BrowserRouter>
+        <BrowserRouter basename={globalPreset.appUrl.routerBasename()}>
             <App themeToken={globalPreset.themeToken} globalPreset={globalPreset} />
         </BrowserRouter>
     );
@@ -21,7 +21,7 @@ const renderRoot = async App => {
 
 if (process.env.NODE_ENV === 'development') {
     import('@kne/modules-dev/dist/create-entry.css');
-    import('@kne/modules-dev/dist/create-entry').then(module => {
+    import('@kne/modules-dev/dist/create-entry.modern').then(module => {
         renderRoot(module.default(({ globalPreset }) => <App globalPreset={globalPreset} />));
     });
 } else {
